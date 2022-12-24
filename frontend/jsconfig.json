@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@Components/*": ["components/*"],
+      "@Screen/*": ["screen/*"],
+      "@Hooks/*": ["hooks/*"],
+      "@Recoil/*": ["recoil/*"],
+      "@Functions/*": ["functions/*"],
+      "@Constants/*": ["constants/*"]
+    }
+  }
+}
