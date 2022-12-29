@@ -5,6 +5,7 @@ import createEmotionCache from "../functions/createEmotionCache";
 import theme from "../styles/theme";
 import {CacheProvider} from "@emotion/react";
 import {CssBaseline, ThemeProvider} from "@mui/material";
+import MiddleApp from "@Components/MiddleApp";
 const clientSideEmotionCache = createEmotionCache();
 export default function App(props) {
   const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
@@ -15,6 +16,7 @@ export default function App(props) {
         <Header />
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <MiddleApp />
           <Component {...pageProps} />
         </ThemeProvider>
       </CacheProvider>

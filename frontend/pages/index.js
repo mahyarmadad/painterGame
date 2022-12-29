@@ -2,10 +2,12 @@ import {useEffect, useState} from "react";
 import {useRecoilState} from "recoil";
 import {userRecoil} from "../recoil/user";
 import {useRouter} from "next/router";
-import {Button, TextField, Typography} from "@mui/material";
+import {TextField, Typography} from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import {useCallback} from "react";
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [user, setUser] = useRecoilState(userRecoil);
   const router = useRouter();
@@ -15,7 +17,10 @@ export default function Home() {
   }, [user, router]);
 
   const onEnterClick = useCallback(() => {
+    setLoading(true);
+    sendNewUser(username);
     setUser(username);
+    setLoading(false);
   }, [setUser, username]);
 
   return (
@@ -30,15 +35,16 @@ export default function Home() {
           onChange={(e) => setUsername(e.target.value.trim())}
           value={username}
         />
-        <Button
+        <LoadingButton
           variant="contained"
+          loading={loading}
           fullWidth
           color="primary"
           className="mt-4"
           size="large"
           onClick={onEnterClick}>
           Enter
-        </Button>
+        </LoadingButton>
       </div>
     </div>
   );
