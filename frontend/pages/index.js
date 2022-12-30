@@ -5,6 +5,7 @@ import {useRouter} from "next/router";
 import {TextField, Typography} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {useCallback} from "react";
+import {sendNewUser} from "@Hooks/socketServer";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);

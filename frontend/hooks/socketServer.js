@@ -12,6 +12,7 @@ export const useSocket = () => {
   useEffect(() => {
     if (!user) return;
     const socket = io("http://localhost:4000");
+    if (!socket) return;
     socketRef = socket;
 
     socket.on("connect", () => {
@@ -34,7 +35,7 @@ export const useSocket = () => {
     socketRef?.on("user-exist", (data) => {
       console.log("user-exist", data);
     });
-  }, [setOnlineUsers]);
+  }, []);
 };
 
 export const sendMessage = () => {
@@ -42,4 +43,13 @@ export const sendMessage = () => {
 };
 export const sendNewUser = (username) => {
   socketRef?.emit("newUser", username);
+};
+export const socketStartDraw = (obj) => {
+  socketRef?.emit("startDraw", obj);
+};
+export const socketDraw = (obj) => {
+  socketRef?.emit("draw", obj);
+};
+export const socketStopDraw = () => {
+  socketRef?.emit("stopDraw", {});
 };
