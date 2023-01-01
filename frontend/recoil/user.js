@@ -6,5 +6,5 @@ export const userRecoil = atom({
 });
 export const onlineUsersRecoil = atom({
   key: "onlineUsersRecoil",
-  default: [],
+  default: {},
 });

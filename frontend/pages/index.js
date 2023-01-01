@@ -19,7 +19,6 @@ export default function Home() {
 
   const onEnterClick = useCallback(() => {
     setLoading(true);
-    sendNewUser(username);
     setUser(username);
     setLoading(false);
   }, [setUser, username]);
@@ -39,6 +38,7 @@ export default function Home() {
         <LoadingButton
           variant="contained"
           loading={loading}
+          disabled={loading || !username}
           fullWidth
           color="primary"
           className="mt-4"
