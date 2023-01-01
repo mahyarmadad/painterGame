@@ -1,0 +1,20 @@
+.message {
+  width: fit-content;
+  padding: 8px;
+  border-radius: 16px;
+  position: relative;
+  display: grid;
+  margin-bottom: 8px;
+  max-width: 200px;
+}
+.userMessage {
+  background: #5aa377;
+}
+.friendMessage {
+  align-self: end;
+  background: #0d5771;
+}
+.date {
+  justify-self: flex-end;
+  font-size: 8px;
+}
