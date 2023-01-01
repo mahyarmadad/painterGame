@@ -2,14 +2,16 @@ const users = {};
 let io = null;
 export const setIO = (ioConnection) => (io = ioConnection);
 export const getIO = () => io;
-export const checkUser = (socket) => {
-  let { id, user } = socket;
-  if (users[user]) {
-    socket.to(id).emit("user-exist", "Exist");
-  }
+
+export const addSocketUser = (socket, username) => {
+  if (users[username]) return io.to(socket.id).emit("full", "userExist");
+  if (Object.keys(users).length === 2)
+    return io.to(socket.id).emit("full", "roomFull");
+
+  console.log("users", Object.keys(users));
+  users[username] = socket.id;
 };
-export const addSocketUser = (socketId, username) =>
-  (users[username] = socketId);
+
 export const removeSocketUser = (socketId) => {
   for (let key in users) {
     if (users[key] === socketId) {

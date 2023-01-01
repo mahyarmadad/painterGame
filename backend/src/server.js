@@ -3,7 +3,6 @@ import cors from "cors";
 import socketIO from "socket.io";
 import {
   addSocketUser,
-  checkUser,
   emitOnlineUsers,
   removeSocketUser,
   setIO,
@@ -25,10 +24,12 @@ setIO(io);
 
 io.on("connection", (socket) => {
   console.log("a user connected", socket.id);
-  checkUser(socket);
 
   socket.on("newUser", (data) => {
-    addSocketUser(socket.id, data);
+    addSocketUser(socket, data);
+  });
+  socket.on("sendMsg", (data) => {
+    console.log("sendMsg", data);
   });
 
   socket.on("disconnect", () => {
