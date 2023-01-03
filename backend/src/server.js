@@ -4,6 +4,7 @@ import socketIO from "socket.io";
 import {
   addSocketUser,
   emitOnlineUsers,
+  manageUserMsg,
   removeSocketUser,
   setIO,
 } from "./socketStore";
@@ -29,7 +30,7 @@ io.on("connection", (socket) => {
     addSocketUser(socket, data);
   });
   socket.on("sendMsg", (data) => {
-    console.log("sendMsg", data);
+    manageUserMsg(data);
   });
 
   socket.on("disconnect", () => {

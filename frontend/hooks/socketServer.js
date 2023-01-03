@@ -1,4 +1,4 @@
-import {roomIsFullRecoil} from "@Recoil/chat";
+import {chatMsgsRecoil, roomIsFullRecoil} from "@Recoil/chat";
 import {useEffect} from "react";
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import io from "socket.io-client";
@@ -10,6 +10,7 @@ export const useSocket = () => {
   const user = useRecoilValue(userRecoil);
   const setOnlineUsers = useSetRecoilState(onlineUsersRecoil);
   const setRoomFull = useSetRecoilState(roomIsFullRecoil);
+  const setChatMasseges = useSetRecoilState(chatMsgsRecoil);
 
   useEffect(() => {
     if (!user) return;
@@ -31,6 +32,10 @@ export const useSocket = () => {
       setOnlineUsers(onlineUsers);
     });
 
+    socket.on("msg", (data) => {
+      setChatMasseges((prev) => [...prev, data]);
+    });
+
     socket.on("disconnect", () => {
       console.log("user disconnected");
     });
@@ -39,7 +44,7 @@ export const useSocket = () => {
       socket.disconnect();
       socketRef = null;
     };
-  }, [user, setOnlineUsers]);
+  }, [user, setOnlineUsers, setRoomFull, setChatMasseges]);
 };
 
 export const sendMessage = (data) => {

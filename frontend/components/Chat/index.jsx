@@ -1,7 +1,7 @@
 import {sendMessage} from "@Hooks/socketServer";
 import {Send} from "@mui/icons-material";
 import {IconButton, InputAdornment, TextField} from "@mui/material";
-import {chatHistoryRecoil} from "@Recoil/chat";
+import {chatHistoryRecoil, chatMsgsRecoil} from "@Recoil/chat";
 import {userRecoil} from "@Recoil/user";
 import {useCallback, useState} from "react";
 import {useRecoilValue} from "recoil";
@@ -11,23 +11,25 @@ export default function ChatContainer() {
   const [chatMsg, setChatMsg] = useState("");
 
   const user = useRecoilValue(userRecoil);
-  const chatHistory = useRecoilValue(chatHistoryRecoil);
+  const chatMassages = useRecoilValue(chatMsgsRecoil);
 
   const onSendMsg = useCallback(() => {
     sendMessage({
-      user,
+      id: Date.now(),
+      username: user,
       text: chatMsg,
+      time: new Date(),
     });
     setChatMsg("");
   }, [chatMsg, user]);
 
   return (
-    <div className="mt-4 flex-1 overflow-auto rounded-lg bg-neutral-900 relative p-2">
-      {chatHistory?.map((chat) => (
+    <div className="mt-4 flex flex-col flex-1 overflow-auto rounded-lg bg-neutral-900 relative p-2">
+      {chatMassages?.map((chat) => (
         <Message
           key={chat.id}
-          content={chat.content}
-          date={chat.date}
+          content={chat.text}
+          date={chat.time}
           username={chat.username}
           isUser={chat.username === user}
         />

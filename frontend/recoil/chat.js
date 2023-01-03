@@ -1,7 +1,7 @@
 import {atom} from "recoil";
 
-export const chatHistoryRecoil = atom({
-  key: "chatHistoryRecoil",
+export const chatMsgsRecoil = atom({
+  key: "chatMsgsRecoil",
   default: [],
 });
 
