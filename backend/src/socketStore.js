@@ -5,7 +5,9 @@ export const setIO = (ioConnection) => (io = ioConnection);
 export const getIO = () => io;
 
 export const addSocketUser = (socket, username) => {
-  if (users[username]) return io.to(socket.id).emit("full", "userExist");
+  console.log({ username, user: users[username], socketId: socket.id });
+  if (users[username] && users[username] === socket.id)
+    return io.to(socket.id).emit("full", "userExist");
   if (Object.keys(users).length === 2)
     return io.to(socket.id).emit("full", "roomFull");
   users[username] = socket.id;

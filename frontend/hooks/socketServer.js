@@ -1,4 +1,5 @@
 import {chatMsgsRecoil, roomIsFullRecoil} from "@Recoil/chat";
+import {drawRecoil, startDrawRecoil, stopDrawRecoil} from "@Recoil/drawing";
 import {useEffect} from "react";
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import io from "socket.io-client";
@@ -11,6 +12,10 @@ export const useSocket = () => {
   const setOnlineUsers = useSetRecoilState(onlineUsersRecoil);
   const setRoomFull = useSetRecoilState(roomIsFullRecoil);
   const setChatMasseges = useSetRecoilState(chatMsgsRecoil);
+
+  const setStartDraw = useSetRecoilState(startDrawRecoil);
+  const setDraw = useSetRecoilState(drawRecoil);
+  const setStopDraw = useSetRecoilState(stopDrawRecoil);
 
   useEffect(() => {
     if (!user) return;
@@ -35,6 +40,15 @@ export const useSocket = () => {
     socket.on("msg", (data) => {
       setChatMasseges((prev) => [...prev, data]);
     });
+    socket.on("startDraw", (data) => {
+      setStartDraw(data);
+    });
+    socket.on("draw", (data) => {
+      setDraw(data);
+    });
+    socket.on("stopDraw", () => {
+      setStopDraw(true);
+    });
 
     socket.on("disconnect", () => {
       console.log("user disconnected");
@@ -44,17 +58,17 @@ export const useSocket = () => {
       socket.disconnect();
       socketRef = null;
     };
-  }, [user, setOnlineUsers, setRoomFull, setChatMasseges]);
+  }, [user, setOnlineUsers, setRoomFull, setChatMasseges, setStartDraw, setDraw, setStopDraw]);
 };
 
 export const sendMessage = (data) => {
   socketRef?.emit("sendMsg", data);
 };
 export const socketStartDraw = (obj) => {
-  socketRef?.emit("startDraw", obj);
+  socketRef?.emit("startDraw", {...obj, socketId: socketRef.id});
 };
 export const socketDraw = (obj) => {
-  socketRef?.emit("draw", obj);
+  socketRef?.emit("draw", {...obj, socketId: socketRef.id});
 };
 export const socketStopDraw = () => {
   socketRef?.emit("stopDraw", {});

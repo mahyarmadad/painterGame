@@ -3,6 +3,7 @@ import {errors} from "@Constants/error";
 import {socketDraw, socketStartDraw, socketStopDraw} from "@Hooks/socketServer";
 import {TextField, Typography} from "@mui/material";
 import {roomIsFullRecoil} from "@Recoil/chat";
+import {drawRecoil, startDrawRecoil, stopDrawRecoil} from "@Recoil/drawing";
 import {useRouter} from "next/router";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useRecoilValue} from "recoil";
@@ -26,6 +27,10 @@ export default function AppPage() {
   const onlineUsers = useRecoilValue(onlineUsersRecoil);
   const roomIsFull = useRecoilValue(roomIsFullRecoil);
 
+  const startDrawValue = useRecoilValue(startDrawRecoil);
+  const drawValue = useRecoilValue(drawRecoil);
+  const stopDrawValue = useRecoilValue(stopDrawRecoil);
+
   const router = useRouter();
   const canvasRef = useRef();
 
@@ -42,13 +47,13 @@ export default function AppPage() {
     context.moveTo(cor.x, cor.y);
   }, []);
 
-  const draw = useCallback(({x, y, lineColor = "black"}) => {
+  const draw = useCallback(({x, y, color = "black"}) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     let context = canvas.getContext("2d");
     let cor = getMousePos(canvas, x, y);
     context.lineTo(cor.x, cor.y);
-    context.strokeStyle = lineColor;
+    context.strokeStyle = color;
     context.lineWidth = "1";
     context.lineJoin = "round";
     context.lineCap = "round";
@@ -102,6 +107,16 @@ export default function AppPage() {
     },
     [isDrawing, stopDraw],
   );
+
+  useEffect(() => {
+    if (startDrawValue) startDraw(startDrawValue);
+  }, [startDraw, startDrawValue]);
+  useEffect(() => {
+    if (drawValue) draw(drawValue);
+  }, [draw, drawValue]);
+  useEffect(() => {
+    if (stopDrawValue) stopDraw();
+  }, [stopDraw, stopDrawValue]);
 
   return (
     <div className="h-screen flex justify-center">

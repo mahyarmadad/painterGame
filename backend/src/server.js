@@ -4,6 +4,7 @@ import socketIO from "socket.io";
 import {
   addSocketUser,
   emitOnlineUsers,
+  getOnlineUsers,
   manageUserMsg,
   removeSocketUser,
   setIO,
@@ -31,6 +32,22 @@ io.on("connection", (socket) => {
   });
   socket.on("sendMsg", (data) => {
     manageUserMsg(data);
+  });
+
+  socket.on("startDraw", (data) => {
+    const users = getOnlineUsers();
+    const otherUsers = Object.values(users).filter((v) => v !== data.socketId);
+    io.to(otherUsers).emit("startDraw", data);
+  });
+  socket.on("draw", (data) => {
+    const users = getOnlineUsers();
+    const otherUsers = Object.values(users).filter((v) => v !== data.socketId);
+    io.to(otherUsers).emit("draw", data);
+  });
+  socket.on("stopDraw", () => {
+    const users = getOnlineUsers();
+    const otherUsers = Object.values(users).filter((v) => v !== socket.id);
+    io.to(otherUsers).emit("stopDraw");
   });
 
   socket.on("disconnect", () => {
